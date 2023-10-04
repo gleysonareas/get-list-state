@@ -1,6 +1,6 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  // "extends": "./.nuxt/tsconfig.json",
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "target": "ESNext",
@@ -20,15 +20,15 @@
     "noEmit": true,
     "paths": {
       "@/*": [
-        "src/*"
+        "/*"
       ]
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
+    "/**/*.ts",
+    "/**/*.d.ts",
+    "/**/*.tsx",
+    "/**/*.vue"
   ],
   "references": [
     {

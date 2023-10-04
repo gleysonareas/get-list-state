@@ -6,8 +6,7 @@
       </header>
     </section>
     <section class="content">
-      <NuxtPage>
-      </NuxtPage>
+      <NuxtPage/>
     </section>
     <section class="footer flex justify-center bg-[#020617] text-white fixed w-full bottom-0">
       <footer>

@@ -130,14 +130,19 @@
       </v-card>
 
       <v-card class="m-4" title="Outras informações:" variant="outlined">
-        <v-row class="p-4">
-          <v-col cols="12" md="4">
-            <v-text-field
+        <v-switch
+          label="Selecione para adicionar mais dados"
+          @click="setVisibleField()"
+        ></v-switch>
+
+        <v-row v-if="isVisibleField" class="p-4">
+          <v-col>
+            <v-textarea
               v-model="user.other"
               label="Outros"
               hide-details
               required
-            ></v-text-field>
+            ></v-textarea>
           </v-col>
         </v-row>
       </v-card>
@@ -157,6 +162,8 @@
 import { UserModel } from "../../shared/models/user.model";
 
 const valid: boolean = false;
+let isVisibleField = false;
+
 let user: UserModel = {
   date: "",
   name: "",
@@ -175,6 +182,11 @@ let user: UserModel = {
     number: "",
   },
 };
+
+function setVisibleField() {
+  if (isVisibleField == false) return (isVisibleField = true);
+  if (isVisibleField == true) return (isVisibleField = false);
+}
 </script>
 
 <style></style>

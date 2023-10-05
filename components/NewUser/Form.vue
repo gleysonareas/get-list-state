@@ -21,6 +21,7 @@
               label="Nome Completo"
               hide-details
               required
+              @change="v$.name.$invalid"
             ></v-text-field>
           </v-col>
 
@@ -160,6 +161,9 @@
 
 <script setup lang="ts">
 import { UserModel } from "../../shared/models/user.model";
+import { reactive } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 const valid: boolean = false;
 let isVisibleField = false;
@@ -182,6 +186,46 @@ let user: UserModel = {
     number: "",
   },
 };
+
+const state = reactive({
+  date: "",
+  name: "",
+  cpf: "",
+  species: "",
+  breed: "",
+  other: "",
+  monthlyIncome: "",
+  address: {
+    cep: "",
+    road: "",
+    subdivision: "",
+    neighborhood: "",
+    city: "",
+    estate: "",
+    number: "",
+  },
+});
+
+const rules = {
+  date: { required },
+  name: { required },
+  cpf: { required },
+  species: { required },
+  breed: { required },
+  other: { required },
+  monthlyIncome: { required },
+  address: {
+    cep: { required },
+    road: { required },
+    subdivision: { required },
+    neighborhood: { required },
+    city: { required },
+    estate: { required },
+    number: { required },
+  },
+};
+
+const v$ = useVuelidate(rules, state);
 
 function setVisibleField() {
   if (isVisibleField == false) return (isVisibleField = true);

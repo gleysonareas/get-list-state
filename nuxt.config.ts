@@ -1,10 +1,9 @@
-import { defineNuxtConfig } from "nuxt/config"
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { defineNuxtConfig } from "nuxt/config";
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    // "@nuxtjs/axios",
     '@nuxtjs/tailwindcss',
     '@invictus.codes/nuxt-vuetify',
     (_options, nuxt) => {
@@ -18,7 +17,7 @@ export default defineNuxtConfig({
   ],
   plugins: [
     { src: '/plugins/vuetify.ts' },
-    // { src: '/plugins/axios.ts' }
+    { src: '/plugins/vuelidate.ts' },
   ],
   vite: {
     vue: {

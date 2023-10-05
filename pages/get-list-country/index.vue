@@ -1,14 +1,43 @@
 <template>
   <section class="get-list-container w-full grid justify-items-center">
-    <h3 class="text-h3 m-4 text-blue-600">
-      Selecione um país na lista abaixo
-    </h3>
-    <h5 class="text-h5 m-4 text-blue-600">
-      Basta digitar e realizaremos uma busca para você!
-    </h5>
-    <div class="get-list-content w-96">
-      <v-autocomplete item-children="" label="Faça sua Consulta clicando aqui" item-title="name.common" :items="country">
-      </v-autocomplete>
+    <h3 class="text-h3 m-4 text-blue-600">Selecione um país na lista abaixo</h3>
+    <v-container class="flex flex-wrap justify-center">
+      <v-card
+        class="m-4 w-2/6"
+        variant="outlined"
+        v-for="(item, i) in country"
+        :key="i"
+      >
+        <v-card-title>País: {{ item.name.common }}</v-card-title>
+        <v-card-title>Capítal: {{ item.capital[0] }}</v-card-title>
+        <v-btn
+          variant="tonal"
+          color="blue-darken-2"
+          @click="setLatLong(item.capitalInfo)"
+        >
+          Ver no mapa
+        </v-btn>
+      </v-card>
+    </v-container>
+    <div v-if="isVisible == true" :ref="isVisible" class="w-9/12">
+      <div :ref="locationCountry" class="w-full">
+        <iframe
+          width="100%"
+          height="250"
+          frameborder="0"
+          scrolling="no"
+          marginheight="0"
+          marginwidth="0"
+          :src="
+            'https://maps.google.com/maps?q=' +
+            locationCountry.latlng[0] +
+            ',' +
+            locationCountry.latlng[1] +
+            '&hl=en&z=3&amp;output=embed'
+          "
+        >
+        </iframe>
+      </div>
     </div>
     <NuxtLink to="/">
       <v-btn variant="tonal" color="red-darken-2"> Voltar </v-btn>
@@ -18,18 +47,27 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import api from "../../services/api"
+import api from "../../services/api";
 
-const country = ref([])
+const country = ref<any>([]);
+const locationCountry = ref({ latlng: [] });
+const isVisible = ref<boolean>();
 
-const getAll = async () => api.http
-  .get("/subregion/america")
-  .then((resp) => {
-    country.value = resp.data
+const getAll = async () =>
+  api.http.get("/subregion/america").then((resp) => {
+    country.value = resp.data;
     return country;
-  })
+  });
 
-onMounted(getAll)
+const setLatLong = (data: any) => {
+  locationCountry.value.latlng = data.latlng;
+  isVisible.value = true;
+  return locationCountry && isVisible;
+};
+
+onMounted(() => {
+  getAll();
+});
 </script>
 
 <style></style>

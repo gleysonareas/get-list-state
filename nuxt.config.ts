@@ -7,12 +7,14 @@ export default defineNuxtConfig({
     // "@nuxtjs/axios",
     '@nuxtjs/tailwindcss',
     '@invictus.codes/nuxt-vuetify',
-    // '@nuxtjs/dayjs',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
+  ],
+  buildModules: [
+    "@nuxtjs/axios"
   ],
   plugins: [
     { src: '/plugins/vuetify.ts' },

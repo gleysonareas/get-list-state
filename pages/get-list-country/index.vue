@@ -7,17 +7,8 @@
       Basta digitar e realizaremos uma busca para você!
     </h5>
     <div class="get-list-content w-96">
-      <v-autocomplete
-        label="Faça sua Consulta clicando aqui"
-        :items="[
-          'California',
-          'Colorado',
-          'Florida',
-          'Georgia',
-          'Texas',
-          'Wyoming',
-        ]"
-      ></v-autocomplete>
+      <v-autocomplete item-children="" label="Faça sua Consulta clicando aqui" item-title="name.common" :items="country">
+      </v-autocomplete>
     </div>
     <NuxtLink to="/">
       <v-btn variant="tonal" color="red-darken-2"> Voltar </v-btn>
@@ -25,6 +16,20 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+import api from "../../services/api"
+
+const country = ref([])
+
+const getAll = async () => api.http
+  .get("/subregion/america")
+  .then((resp) => {
+    country.value = resp.data
+    return country;
+  })
+
+onMounted(getAll)
+</script>
 
 <style></style>

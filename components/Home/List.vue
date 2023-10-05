@@ -31,9 +31,19 @@
 
 <script setup lang="ts">
 import { UserModel } from "../../shared/models/user.model";
+import api from "../../services/api"
+import { onMounted, ref } from "vue";
 
-let listUser!: UserModel[];
-;
+const listUser: UserModel[] | any = ref([]);
+
+const getAll = async () => api.httpJson
+  .get("/user-list")
+  .then((resp: any) => {
+    listUser.value = resp
+    return listUser;
+  })
+
+onMounted(getAll)
 </script>
 
 <style></style>

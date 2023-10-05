@@ -39,7 +39,7 @@ const listUser: UserModel[] | any = ref([]);
 const getAll = async () => api.httpJson
   .get("/user-list")
   .then((resp: any) => {
-    listUser.value = resp
+    listUser.value = resp.data
     return listUser;
   })
 

@@ -6,18 +6,19 @@
       </div>
       <v-card class="m-4" title="Dados pessoais:" variant="outlined">
         <v-row class="p-4">
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
-              v-model="user.date"
+              v-model="state.date"
               label="Data de Nascimento"
               required
               hide-details
+              v-mask="'##/##/####'"
             ></v-text-field>
           </v-col>
 
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="user.name"
+              v-model="state.name"
               label="Nome Completo"
               hide-details
               required
@@ -25,17 +26,18 @@
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
-              v-model="user.cpf"
+              v-model="state.cpf"
               label="CPF"
               hide-details
               required
+              v-mask="'###.###.###-##'"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="2">
             <v-text-field
-              v-model="user.monthlyIncome"
+              v-model="state.monthlyIncome"
               label="Renda Mensal"
               required
               hide-details
@@ -48,7 +50,7 @@
         <v-row class="p-4">
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="user.species"
+              v-model="state.species"
               label="Espécie"
               hide-details
               required
@@ -57,7 +59,7 @@
 
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="user.breed"
+              v-model="state.breed"
               label="Raça"
               hide-details
               required
@@ -68,60 +70,61 @@
 
       <v-card class="m-4" title="Endereço:" variant="outlined">
         <v-row class="p-4">
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
-              v-model="user.address.cep"
+              v-model="state.address.cep"
               label="CEP"
               required
               hide-details
+              v-mask="'#####-###'"
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6">
             <v-text-field
-              v-model="user.address.road"
+              v-model="state.address.road"
               label="Rua"
               hide-details
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="2">
             <v-text-field
-              v-model="user.address.number"
+              v-model="state.address.number"
               label="Número"
               required
               hide-details
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
-              v-model="user.address.subdivision"
+              v-model="state.address.subdivision"
               label="Loteamento"
               hide-details
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
-              v-model="user.address.neighborhood"
+              v-model="state.address.neighborhood"
               label="Bairro"
               required
               hide-details
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
-              v-model="user.address.city"
+              v-model="state.address.city"
               label="Cidade"
               hide-details
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="2">
             <v-text-field
-              v-model="user.address.estate"
+              v-model="state.address.estate"
               label="Estado"
               hide-details
               required
@@ -139,7 +142,7 @@
         <v-row v-if="isVisibleField" class="p-4">
           <v-col>
             <v-textarea
-              v-model="user.other"
+              v-model="state.other"
               label="Outros"
               hide-details
               required
@@ -153,22 +156,32 @@
         <v-btn variant="tonal" color="red-darken-2"> Cancelar </v-btn>
       </NuxtLink>
       <NuxtLink to="/">
-        <v-btn variant="tonal" color="indigo-darken-3"> Salvar </v-btn>
+        <v-btn variant="tonal" color="indigo-darken-3" @click="submitForm">
+          Salvar
+        </v-btn>
       </NuxtLink>
     </v-container>
   </v-form>
 </template>
 
 <script setup lang="ts">
+import api from "../../services/api";
 import { UserModel } from "../../shared/models/user.model";
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import {
+  required,
+  requiredIf,
+  minLength,
+  maxLength,
+  between,
+} from "@vuelidate/validators";
+import { cpf } from "cpf-cnpj-validator";
 
 const valid: boolean = false;
 let isVisibleField = false;
 
-let user: UserModel = {
+let userForm: UserModel = {
   date: "",
   name: "",
   cpf: "",
@@ -206,30 +219,36 @@ const state = reactive({
   },
 });
 
-const rules = {
-  date: { required },
-  name: { required },
-  cpf: { required },
-  species: { required },
-  breed: { required },
-  other: { required },
-  monthlyIncome: { required },
-  address: {
-    cep: { required },
-    road: { required },
-    subdivision: { required },
-    neighborhood: { required },
-    city: { required },
-    estate: { required },
-    number: { required },
-  },
-};
+const rules = computed(() => {
+  return {
+    date: { required },
+    name: { required, minLength: minLength(4) },
+    cpf: { required },
+    species: { required },
+    breed: { required },
+    other: { required },
+    monthlyIncome: { required },
+    address: {
+      cep: { required },
+      road: { required },
+      subdivision: { required },
+      neighborhood: { required },
+      city: { required },
+      estate: { required },
+      number: { required },
+    },
+  };
+});
 
 const v$ = useVuelidate(rules, state);
 
 function setVisibleField() {
   if (isVisibleField == false) return (isVisibleField = true);
   if (isVisibleField == true) return (isVisibleField = false);
+}
+
+function submitForm() {
+  api.httpJson.post("/user-list", userForm);
 }
 </script>
 

@@ -18,6 +18,7 @@ export default defineNuxtConfig({
   plugins: [
     { src: '/plugins/vuetify.ts' },
     { src: '/plugins/vuelidate.ts' },
+    { src: '/plugins/mask.ts' },
   ],
   vite: {
     vue: {

@@ -2,6 +2,7 @@ import { defineNuxtPlugin } from "nuxt/app"
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
+import { VDatePicker } from 'vuetify/labs/VDatePicker'
 
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
@@ -17,4 +18,5 @@ export default defineNuxtPlugin((app) => {
     },
   })
   app.vueApp.use(vuetify)
+app.vueApp.component('v-date-picker',VDatePicker)
 })

@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" @submit.prevent="submitForm" :ref="valid">
     <v-container>
       <div class="title-content">
         <h4 class="text-h4 m-4">Novo Dado:</h4>
@@ -24,6 +24,7 @@
               required
               @change="v$.name.$invalid"
             ></v-text-field>
+            <span v-if="v$.name.$error">{{ v$.name.$errors[0].$message }}</span>
           </v-col>
 
           <v-col cols="12" md="3">
@@ -49,21 +50,41 @@
       <v-card class="m-4" title="Dados do Pet:" variant="outlined">
         <v-row class="p-4">
           <v-col cols="12" md="4">
-            <v-text-field
-              v-model="state.species"
-              label="Espécie"
-              hide-details
+            <v-select
               required
-            ></v-text-field>
+              label="Espécie"
+              v-model="state.species"
+              :ref="state.species"
+              item-title="title"
+              item-value="value"
+              :items="[
+                { title: '', lang: '' },
+                { title: 'Cachorro', value: 'dog' },
+                { title: 'Gato', lang: 'cat' },
+                { title: 'Outros', lang: 'others' },
+              ]"
+            ></v-select>
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-text-field
-              v-model="state.breed"
-              label="Raça"
-              hide-details
+            <v-select
               required
-            ></v-text-field>
+              label="Raça"
+              v-model="state.breed"
+              :ref="state.breed"
+              item-title="title"
+              item-value="title"
+              :items="[
+                { title: '' },
+                { title: 'Poodle' },
+                { title: 'Pinscher' },
+                { title: 'Labrador' },
+                { title: 'Vira-latas' },
+                { title: 'Persa' },
+                { title: 'Siamês' },
+                { title: 'Outro' },
+              ]"
+            ></v-select>
           </v-col>
         </v-row>
       </v-card>
@@ -77,6 +98,7 @@
               required
               hide-details
               v-mask="'#####-###'"
+              @blur="searchCep"
             ></v-text-field>
           </v-col>
 
@@ -139,7 +161,7 @@
           @click="setVisibleField()"
         ></v-switch>
 
-        <v-row v-if="isVisibleField" class="p-4">
+        <v-row v-if="isVisibleField" class="p-4" :ref="isVisibleField">
           <v-col>
             <v-textarea
               v-model="state.other"
@@ -156,7 +178,7 @@
         <v-btn variant="tonal" color="red-darken-2"> Cancelar </v-btn>
       </NuxtLink>
       <NuxtLink to="/">
-        <v-btn variant="tonal" color="indigo-darken-3" @click="submitForm">
+        <v-btn type="submit" variant="tonal" color="indigo-darken-3">
           Salvar
         </v-btn>
       </NuxtLink>
@@ -166,8 +188,7 @@
 
 <script setup lang="ts">
 import api from "../../services/api";
-import { UserModel } from "../../shared/models/user.model";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import {
   required,
@@ -175,30 +196,13 @@ import {
   minLength,
   maxLength,
   between,
+  numeric,
 } from "@vuelidate/validators";
 import { cpf } from "cpf-cnpj-validator";
 
-const valid: boolean = false;
-let isVisibleField = false;
-
-let userForm: UserModel = {
-  date: "",
-  name: "",
-  cpf: "",
-  species: "",
-  breed: "",
-  other: "",
-  monthlyIncome: "",
-  address: {
-    cep: "",
-    road: "",
-    subdivision: "",
-    neighborhood: "",
-    city: "",
-    estate: "",
-    number: "",
-  },
-};
+const valid = ref<boolean>(false);
+const isVisibleField = ref<boolean>(false);
+const isVisibleCalendar = ref<boolean>(false);
 
 const state = reactive({
   date: "",
@@ -235,7 +239,7 @@ const rules = computed(() => {
       neighborhood: { required },
       city: { required },
       estate: { required },
-      number: { required },
+      number: { required, numeric },
     },
   };
 });
@@ -243,12 +247,31 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, state);
 
 function setVisibleField() {
-  if (isVisibleField == false) return (isVisibleField = true);
-  if (isVisibleField == true) return (isVisibleField = false);
+  if (isVisibleField.value == false) return (isVisibleField.value = true);
+  if (isVisibleField.value == true) return (isVisibleField.value = false);
+}
+
+function searchCep() {
+  api.request
+    .get("https://viacep.com.br/ws/" + state.address.cep + "/json/")
+    .then((response) => {
+      if (response.data.erro == true) {
+        alert("Cidade não encontrada");
+      } else {
+        state.address.road = response.data.logradouro;
+        state.address.neighborhood = response.data.bairro;
+        state.address.city = response.data.localidade;
+        state.address.estate = response.data.uf;
+        console.log(response.data);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 function submitForm() {
-  api.httpJson.post("/user-list", userForm);
+  api.httpJson.post("/user-list", state);
 }
 </script>
 

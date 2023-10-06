@@ -8,6 +8,10 @@ const httpJson: AxiosInstance = axios.create({
   baseURL: "http://localhost:3000"
 })
 
-const api = { http, httpJson }
+const request: AxiosInstance = axios.create({
+  baseURL: ""
+})
+
+const api = { http, httpJson, request }
 
 export default (api)

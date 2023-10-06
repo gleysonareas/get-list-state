@@ -1,14 +1,20 @@
 <template>
   <section class="get-list-container w-full grid justify-items-center">
     <h3 class="text-h3 m-4 text-blue-600">Selecione um país na lista abaixo</h3>
-    <div class="fields-content flex w-full">
-      <v-card-text>
-        <!-- <v-text-field density="compact" variant="solo" label="Search templates" append-inner-icon="mdi-magnify"
-          single-line hide-details @click:append-inner="searchByLanguage" v-model="language"
-          :ref="language"></v-text-field> -->
-        <v-select label="Selecione um Idioma" v-model="language" :ref="language" item-title="title" item-value="lang"
+    <h4 class="text-h4 m-4 text-blue-600">Ou faça uma busca por países ou um país em questão</h4>
+    <div class="fields-content grid w-2/6">
+      <v-card-text class="">
+        <v-card-title>Busca por Idioma:</v-card-title>
+        <v-select label="Selecione um idioma" v-model="language" :ref="language" item-title="title" item-value="lang"
           :items="[{ title: '', lang: '' }, { title: 'Português', lang: 'portuguese' }, { title: 'Inglês', lang: 'english' }, { title: 'Espanhol', lang: 'spanish' }, { title: 'Francês', lang: 'french' },]"></v-select>
         <v-btn variant="tonal" color="blue-darken-2" @click="searchByLanguage"> Pesquisar </v-btn>
+      </v-card-text>
+      <v-divider class="border-opacity-100"></v-divider>
+      <v-card-text>
+        <v-card-title>Busca por Nome:</v-card-title>
+        <v-text-field density="compact" variant="solo" label="Digite o nome de um País" append-inner-icon="mdi-magnify"
+          single-line hide-details @click:append-inner="searchByName" v-model="countryName"
+          :ref="countryName"></v-text-field>
       </v-card-text>
     </div>
     <v-container class="flex flex-wrap justify-center">
@@ -32,7 +38,7 @@
       </div>
     </div>
     <NuxtLink to="/">
-      <v-btn variant="tonal" color="red-darken-2"> Voltar </v-btn>
+      <v-btn class="m-8" variant="tonal" color="red-darken-2"> Voltar </v-btn>
     </NuxtLink>
   </section>
 </template>
@@ -45,6 +51,7 @@ const country = ref<any>([]);
 const locationCountry = ref({ latlng: [] });
 const isVisible = ref<boolean>();
 const language = ref<string>("");
+const countryName = ref<string>("")
 
 const getAll = async () =>
   api.http.get("/subregion/america").then((resp) => {
@@ -67,6 +74,16 @@ const setLatLong = (data: any) => {
 const searchByLanguage = () => {
   if (language.value) {
     api.http.get(`/lang/${language.value}`).then((resp) => {
+      country.value = resp.data;
+      return country
+    })
+  } else {
+    getAll();
+  }
+}
+const searchByName = () => {
+  if (countryName.value) {
+    api.http.get(`/name/${countryName.value}`).then((resp) => {
       country.value = resp.data;
       return country
     })

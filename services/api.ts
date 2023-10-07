@@ -5,7 +5,10 @@ const http: AxiosInstance = axios.create({
 })
 
 const httpJson: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3000"
+  baseURL: "http://localhost:3000",
+  headers: {
+    "Content-Type": "application/json",
+  }
 })
 
 const request: AxiosInstance = axios.create({

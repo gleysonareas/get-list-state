@@ -27,6 +27,8 @@
     "@nuxtjs/dayjs": "^1.4.1",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@types/node": "^18.15.0",
+    "@vee-validate/nuxt": "^4.11.8",
+    "@vee-validate/rules": "^4.11.8",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vuelidate/core": "^2.0.3",
@@ -36,16 +38,17 @@
     "eslint": "^8.22.0",
     "eslint-plugin-vue": "^9.3.0",
     "json-server": "^0.17.4",
-    "maska": "^2.1.10",
     "sass": "^1.60.0",
     "typescript": "^5.0.0",
     "unplugin-fonts": "^1.0.3",
+    "uuid": "^9.0.1",
     "v-mask": "^2.3.0",
+    "vee-validate": "4.11.8",
     "vite": "^4.2.0",
     "vite-plugin-vuetify": "^1.0.0",
     "vue-the-mask": "^0.11.1",
     "vue-tsc": "^1.2.0",
-    "vuelidate": "^0.7.7",
+    "vue-uuid": "^3.0.0",
     "vuetify": "^3.3.19"
   }
 }

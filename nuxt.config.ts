@@ -6,6 +6,18 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@invictus.codes/nuxt-vuetify',
+    [
+      '@vee-validate/nuxt',
+      {
+        autoImports: true,
+        componentNames: {
+          Form: 'VeeForm',
+          Field: 'VeeField',
+          FieldArray: 'VeeFieldArray',
+          ErrorMessage: 'VeeErrorMessage',
+        },
+      },
+    ],
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins.push(vuetify({ autoImport: true }))
@@ -17,8 +29,9 @@ export default defineNuxtConfig({
   ],
   plugins: [
     { src: '/plugins/vuetify.ts' },
-    { src: '/plugins/vuelidate.ts' },
-    { src: '/plugins/mask.ts' },
+    { src: '/plugins/veeValidate.ts' },
+    { src: '/plugins/vueTheMask.ts' },
+    { src: '/plugins/uuid.ts' },
   ],
   vite: {
     vue: {

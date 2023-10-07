@@ -22,8 +22,11 @@
         <td class="text-left">{{ item.breed }}</td>
         <td class="text-left">{{ item.other }}</td>
         <td class="text-left">{{ item.monthlyIncome }}</td>
-        <td class="text-left">{{ item.cep }}</td>
-        <td class="text-left">{{ item.address }}</td>
+        <td class="text-left">{{ item.address.cep }}</td>
+        <td class="text-left">
+          {{ item.address.road }}, {{ item.address.neighborhood }},
+          {{ item.address.city }}, {{ item.address.estate }}
+        </td>
       </tr>
     </tbody>
   </v-table>
@@ -31,19 +34,18 @@
 
 <script setup lang="ts">
 import { UserModel } from "../../shared/models/user.model";
-import api from "../../services/api"
+import api from "../../services/api";
 import { onMounted, ref } from "vue";
 
 const listUser: UserModel[] | any = ref([]);
 
-const getAll = async () => api.httpJson
-  .get("/user-list")
-  .then((resp: any) => {
-    listUser.value = resp.data
+const getAll = async () =>
+  api.httpJson.get("/user-list").then((resp: any) => {
+    listUser.value = resp.data;
     return listUser;
-  })
+  });
 
-onMounted(getAll)
+onMounted(getAll);
 </script>
 
 <style></style>

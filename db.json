@@ -1,37 +1,22 @@
 {
   "user-list": [
     {
+      "address": {
+        "cep": "28635-720",
+        "road": "Rua Alberto Ceccon Ceccon",
+        "neighborhood": "Prado",
+        "city": "Nova Friburgo",
+        "estate": "RJ",
+        "number": "S/N",
+        "subdivision": "Granja mimosa"
+      },
       "date": "19/06/1992",
-      "name": "Gleyson",
+      "name": "teste teste",
       "cpf": "144.840.657-97",
-      "species": "Cão",
-      "breed": "Viralata",
-      "other": "",
-      "monthlyIncome": "5000",
-      "cep": "28.635-720",
-      "address": "Rua Alberto Ceccon Ceccon; Lote 29; Quadra A; Granja Mimósa; Conselheiro Paulino; Nova Friburgo; RJ"
-    },
-    {
-      "date": "19/06/1992",
-      "name": "Gleyson",
-      "cpf": "144.840.657-97",
-      "species": "Cão",
-      "breed": "Viralata",
-      "other": "",
-      "monthlyIncome": "5000",
-      "cep": "28.635-720",
-      "address": "Rua Alberto Ceccon Ceccon; Lote 29; Quadra A; Granja Mimósa; Conselheiro Paulino; Nova Friburgo; RJ"
-    },
-    {
-      "date": "19/06/1992",
-      "name": "Gleyson",
-      "cpf": "144.840.657-97",
-      "species": "Cão",
-      "breed": "Viralata",
-      "other": "",
-      "monthlyIncome": "5000",
-      "cep": "28.635-720",
-      "address": "Rua Alberto Ceccon Ceccon; Lote 29; Quadra A; Granja Mimósa; Conselheiro Paulino; Nova Friburgo; RJ"
+      "monthlyIncome": "5.000,00",
+      "species": "dog",
+      "breed": "Poodle",
+      "id": "126d28f1-9c25-4029-bc8f-d425ebad9059"
     }
   ]
 }

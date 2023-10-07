@@ -1,6 +1,6 @@
 import { defineNuxtPlugin } from "nuxt/app";
-import Vuelidate from "vuelidate";
+import UUID from "vue-uuid";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(Vuelidate);
+  nuxtApp.vueApp.use(UUID);
 });

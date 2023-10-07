@@ -1,75 +1,20 @@
-# Nuxt 3 Minimal Starter
-
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Projeto desenvolvido com Vue 3 e Nuxt 3 Além de outras dependencias.
 
 ## Setup
-
-Make sure to install the dependencies:
 
 ```bash
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
+Para que os dados sejam carregados o json-server deve ser iniciado na seguinte porta: 
+`http://localhost:3000`
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Projeto iniciado na porta 
+`http://localhost:3001`:
 
 ```bash
+json-server db.json
 # npm
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

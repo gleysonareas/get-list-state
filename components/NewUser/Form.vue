@@ -1,5 +1,10 @@
 <template>
-  <v-form v-model="valid" @submit.prevent="submitForm" :ref="valid">
+  <v-form
+    v-model="valid"
+    @submit.prevent="submitForm"
+    :ref="valid"
+    v-slot="{ errors }"
+  >
     <v-container>
       <div class="title-content">
         <h4 class="text-h4 m-4">Novo Dado:</h4>
@@ -13,7 +18,9 @@
               required
               hide-details
               v-mask="'##/##/####'"
+              rules="required"
             ></v-text-field>
+            <span>{{ errors.required }}</span>
           </v-col>
 
           <v-col cols="12" md="4">
@@ -22,9 +29,8 @@
               label="Nome Completo"
               hide-details
               required
-              @change="v$.name.$invalid"
+              rules="required|minLength:10"
             ></v-text-field>
-            <span v-if="v$.name.$error">{{ v$.name.$errors[0].$message }}</span>
           </v-col>
 
           <v-col cols="12" md="3">
@@ -34,6 +40,7 @@
               hide-details
               required
               v-mask="'###.###.###-##'"
+              rules="required"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
@@ -42,6 +49,7 @@
               label="Renda Mensal"
               required
               hide-details
+              rules="required"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -51,6 +59,7 @@
         <v-row class="p-4">
           <v-col cols="12" md="4">
             <v-select
+              rules="required"
               required
               label="Espécie"
               v-model="state.species"
@@ -68,6 +77,7 @@
 
           <v-col cols="12" md="4">
             <v-select
+              rules="required"
               required
               label="Raça"
               v-model="state.breed"
@@ -99,6 +109,7 @@
               hide-details
               v-mask="'#####-###'"
               @blur="searchCep"
+              rules="required"
             ></v-text-field>
           </v-col>
 
@@ -108,6 +119,7 @@
               label="Rua"
               hide-details
               required
+              rules="required"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
@@ -133,6 +145,7 @@
               label="Bairro"
               required
               hide-details
+              rules="required"
             ></v-text-field>
           </v-col>
 
@@ -142,6 +155,7 @@
               label="Cidade"
               hide-details
               required
+              rules="required"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
@@ -150,6 +164,7 @@
               label="Estado"
               hide-details
               required
+              rules="required"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -168,20 +183,19 @@
               label="Outros"
               hide-details
               required
+              rules="required"
             ></v-textarea>
           </v-col>
         </v-row>
       </v-card>
     </v-container>
     <v-container class="flex justify-center gap-4 mb-8">
-      <NuxtLink to="/">
-        <v-btn variant="tonal" color="red-darken-2"> Cancelar </v-btn>
-      </NuxtLink>
-      <NuxtLink to="/">
-        <v-btn type="submit" variant="tonal" color="indigo-darken-3">
-          Salvar
-        </v-btn>
-      </NuxtLink>
+      <v-btn variant="tonal" color="red-darken-2">
+        <NuxtLink to="/"> Cancelar </NuxtLink>
+      </v-btn>
+      <v-btn type="submit" variant="tonal" color="indigo-darken-3">
+        <NuxtLink to="/"> Salvar </NuxtLink>
+      </v-btn>
     </v-container>
   </v-form>
 </template>
@@ -189,62 +203,14 @@
 <script setup lang="ts">
 import api from "../../services/api";
 import { computed, reactive, ref } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import {
-  required,
-  requiredIf,
-  minLength,
-  maxLength,
-  between,
-  numeric,
-} from "@vuelidate/validators";
-import { cpf } from "cpf-cnpj-validator";
+import { UserModel } from "../../shared/models/user.model";
+import { AddressModel } from "../../shared/models/address.model";
+import { v4 } from "uuid";
 
 const valid = ref<boolean>(false);
 const isVisibleField = ref<boolean>(false);
-const isVisibleCalendar = ref<boolean>(false);
 
-const state = reactive({
-  date: "",
-  name: "",
-  cpf: "",
-  species: "",
-  breed: "",
-  other: "",
-  monthlyIncome: "",
-  address: {
-    cep: "",
-    road: "",
-    subdivision: "",
-    neighborhood: "",
-    city: "",
-    estate: "",
-    number: "",
-  },
-});
-
-const rules = computed(() => {
-  return {
-    date: { required },
-    name: { required, minLength: minLength(4) },
-    cpf: { required },
-    species: { required },
-    breed: { required },
-    other: { required },
-    monthlyIncome: { required },
-    address: {
-      cep: { required },
-      road: { required },
-      subdivision: { required },
-      neighborhood: { required },
-      city: { required },
-      estate: { required },
-      number: { required, numeric },
-    },
-  };
-});
-
-const v$ = useVuelidate(rules, state);
+const state = reactive(<UserModel>{ address: <AddressModel>{} });
 
 function setVisibleField() {
   if (isVisibleField.value == false) return (isVisibleField.value = true);
@@ -262,7 +228,6 @@ function searchCep() {
         state.address.neighborhood = response.data.bairro;
         state.address.city = response.data.localidade;
         state.address.estate = response.data.uf;
-        console.log(response.data);
       }
     })
     .catch((error) => {
@@ -271,7 +236,12 @@ function searchCep() {
 }
 
 function submitForm() {
-  api.httpJson.post("/user-list", state);
+  debugger;
+  state.id = v4();
+  api.httpJson.post("/user-list", state).then((resp) => {
+    console.log(resp);
+  });
+  console.log(state);
 }
 </script>
 

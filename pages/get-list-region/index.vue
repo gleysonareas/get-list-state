@@ -1,5 +1,5 @@
 <template>
-    <CountryContent />
+    <RegionContent />
 </template>
 
 <script setup lang="ts"></script>

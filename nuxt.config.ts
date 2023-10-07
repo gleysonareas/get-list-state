@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     { src: '/plugins/veeValidate.ts' },
     { src: '/plugins/vueTheMask.ts' },
     { src: '/plugins/uuid.ts' },
+    { src: '/plugins/primevue.ts' },
   ],
   vite: {
     vue: {
@@ -40,4 +41,7 @@ export default defineNuxtConfig({
       },
     },
   },
+  css: [
+    "primevue/resources/themes/lara-light-blue/theme.css"
+  ]
 } as any)

@@ -7,20 +7,14 @@
     <div class="fields-content grid w-2/6">
       <v-card-text class="">
         <v-card-title>Busca por Região:</v-card-title>
-        <v-select
-          label="Selecione uma região"
-          v-model="region"
-          item-title="title"
-          item-value="region"
-          :items="[
-            { title: '', region: '' },
-            { title: 'África', region: 'africa' },
-            { title: 'América', region: 'america' },
-            { title: 'Ásia', region: 'asia' },
-            { title: 'Europa', region: 'europe' },
-            { title: 'Oceania', region: 'oceania' },
-          ]"
-        ></v-select>
+        <v-select label="Selecione uma região" v-model="region" item-title="title" item-value="region" :items="[
+          { title: '', region: '' },
+          { title: 'África', region: 'africa' },
+          { title: 'América', region: 'america' },
+          { title: 'Ásia', region: 'asia' },
+          { title: 'Europa', region: 'europe' },
+          { title: 'Oceania', region: 'oceania' },
+        ]"></v-select>
         <v-btn variant="tonal" color="blue-darken-2" @click="searchByRegion">
           Pesquisar
         </v-btn>
@@ -30,14 +24,11 @@
     </div>
 
     <v-container class="flex flex-wrap justify-center">
-      <v-card
-        class="m-4 w-2/6 shadow-xl shadow-blue-500/50"
-        variant="outlined"
-        v-for="(item, i) in country"
-        :key="i"
-      >
-        <Chart type="bar" :data="chartData" :options="chartOptions" />
-      </v-card>
+      <template v-for="(item, i) in country" :key="i">
+        <v-card class="m-4 w-2/6 shadow-xl shadow-blue-500/50" variant="outlined">
+          <Chart type="bar" :data="chartData" :options="chartOptions" />
+        </v-card>
+      </template>
     </v-container>
 
     <NuxtLink to="/">
@@ -48,10 +39,11 @@
 
 <script setup lang="ts">
 import api from "../../services/api";
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
 
 const region = ref<string>("");
 const country = ref<any>([]);
+const setItem = ref<any>({ id: 0, label: '', area: 0, population: 0 });
 
 const chartData = ref({
   labels: ["Area", "População"],
@@ -77,17 +69,14 @@ const chartOptions = ref({
 const searchByRegion = () => {
   api.http.get(`/region/${region.value}`).then((resp: any) => {
     country.value = resp.data;
-    setChartData();
   });
 };
 
-const setChartData = () => {
-  country.value.forEach((item: any) => {
-    chartData.value.datasets[0].label = item.translations.por.official;
-    chartData.value.datasets[0].data.push(item.area as never);
-    chartData.value.datasets[0].data.push(item.population as never);
-  });
-};
+watch(setItem, (newValue) => {
+  chartData.value.datasets[0].label = newValue.translations.por.official;
+  chartData.value.datasets[0].data.push(newValue.area as never);
+  chartData.value.datasets[0].data.push(newValue.population as never);
+})
 </script>
 
 <style></style>

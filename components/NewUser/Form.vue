@@ -5,7 +5,6 @@
     :ref="valid"
     v-slot="{ errors }"
   >
-    <!-- <ValidationObserver v-slot="{ invalid }"> -->
     <v-container>
       <div class="title-content">
         <h4 class="text-h4 m-4">Novo Dado:</h4>
@@ -13,21 +12,22 @@
       <v-card class="m-4" title="Dados pessoais:" variant="outlined">
         <v-row class="p-4">
           <v-col cols="12" md="3">
-            <!-- <ValidationProvider
-                immediate
-                rules="required"
-                v-slot="{ errors }"
-              > -->
             <v-text-field
               v-model="state.date"
               label="Data de Nascimento"
-              required
               hide-details
               v-mask="'##/##/####'"
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
+            <!-- <v-locale-provider locale="pt">
+              <v-date-picker
+                header="Selecione"
+                title="Data de Nascimento"
+                :rules="['required']"
+                v-model="state.date"
+              ></v-date-picker>
+            </v-locale-provider> -->
             <span>{{ errors[0] }}</span>
-            <!-- </ValidationProvider> -->
           </v-col>
 
           <v-col cols="12" md="4">
@@ -35,8 +35,7 @@
               v-model="state.name"
               label="Nome Completo"
               hide-details
-              required
-              rules="required|minLength:10"
+              :rules="['required|minLength:10']"
             ></v-text-field>
           </v-col>
 
@@ -45,18 +44,16 @@
               v-model="state.cpf"
               label="CPF"
               hide-details
-              required
               v-mask="'###.###.###-##'"
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field
               v-model="state.monthlyIncome"
               label="Renda Mensal"
-              required
               hide-details
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -66,8 +63,7 @@
         <v-row class="p-4">
           <v-col cols="12" md="4">
             <v-select
-              rules="required"
-              required
+              :rules="['required']"
               label="Espécie"
               v-model="state.species"
               :ref="state.species"
@@ -84,8 +80,7 @@
 
           <v-col cols="12" md="4">
             <v-select
-              rules="required"
-              required
+              :rules="['required']"
               label="Raça"
               v-model="state.breed"
               :ref="state.breed"
@@ -112,11 +107,10 @@
             <v-text-field
               v-model="state.address.cep"
               label="CEP"
-              required
               hide-details
               v-mask="'#####-###'"
               @blur="searchCep"
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
 
@@ -125,15 +119,13 @@
               v-model="state.address.road"
               label="Rua"
               hide-details
-              required
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field
               v-model="state.address.number"
               label="Número"
-              required
               hide-details
             ></v-text-field>
           </v-col>
@@ -143,16 +135,14 @@
               v-model="state.address.subdivision"
               label="Loteamento"
               hide-details
-              required
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
               v-model="state.address.neighborhood"
               label="Bairro"
-              required
               hide-details
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
 
@@ -161,8 +151,7 @@
               v-model="state.address.city"
               label="Cidade"
               hide-details
-              required
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
@@ -170,8 +159,7 @@
               v-model="state.address.estate"
               label="Estado"
               hide-details
-              required
-              rules="required"
+              :rules="['required']"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -184,14 +172,13 @@
           @click="setVisibleField()"
         ></v-switch>
 
-        <v-row v-if="isVisibleField" class="p-4" :ref="isVisibleField">
+        <v-row v-if="isVisibleField" class="p-4">
           <v-col>
             <v-textarea
               v-model="state.other"
               label="Outros"
               hide-details
-              required
-              rules="required"
+              :rules="['required']"
             ></v-textarea>
           </v-col>
         </v-row>
@@ -205,7 +192,6 @@
         <NuxtLink to="/"> Salvar </NuxtLink>
       </v-btn>
     </v-container>
-    <!-- </ValidationObserver> -->
   </v-form>
 </template>
 
@@ -215,7 +201,6 @@ import { reactive, ref } from "vue";
 import { UserModel } from "../../shared/models/user.model";
 import { AddressModel } from "../../shared/models/address.model";
 import { v4 } from "uuid";
-// import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 const valid = ref<boolean>(false);
 const isVisibleField = ref<boolean>(false);

@@ -3,6 +3,17 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  css: [
+    "primevue/resources/themes/saga-blue/theme.css",
+    'primevue/resources/primevue.css',
+    'primeicons/primeicons.css'
+  ],
+  styleResources: {
+    scss: ["./styles/styles.scss"]
+  },
+  build: {
+    transpile: ["primevue"]
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@invictus.codes/nuxt-vuetify',
@@ -41,7 +52,4 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: [
-    "primevue/resources/themes/lara-light-blue/theme.css"
-  ]
 } as any)

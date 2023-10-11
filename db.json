@@ -17,6 +17,18 @@
       "species": "dog",
       "breed": "Poodle",
       "id": "126d28f1-9c25-4029-bc8f-d425ebad9059"
+    },
+    {
+      "address": {
+        "cep": "28635-720",
+        "road": "Rua Alberto Ceccon Ceccon",
+        "neighborhood": "Prado",
+        "city": "Nova Friburgo",
+        "estate": "RJ"
+      },
+      "cpf": "123.132.121-23",
+      "monthlyIncome": "2",
+      "id": "d738c441-30c0-462a-9cac-ce511ad84a59"
     }
   ]
 }
